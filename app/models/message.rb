@@ -1,3 +1,3 @@
 class Message < ApplicationRecord
-    validates :body, presence: true
+    validates :content, presence: true
 end

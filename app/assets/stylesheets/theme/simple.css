@@ -1,0 +1,49 @@
+/* Base styles from Simple.css */
+@import url('https://cdn.simplecss.org/simple.min.css');
+
+/* Custom overrides to match Astro Simple theme */
+:root {
+  --accent: #2ecc71;
+  --accent-bg: #e8f5e9;
+  --border: #ddd;
+  --code: #d63384;
+  --font-size: 1.15rem;
+  --radius: 5px;
+}
+
+body {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0; 
+  line-height: 1.75;
+}
+
+main {
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+article {
+  margin: 2rem 0;
+}
+
+nav {
+  padding: 0 0;
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+nav a {
+  margin: 0 0 0 0;
+}
+
+img {
+  border-radius: var(--radius);
+  max-width: 100%;
+  height: auto;
+}
+
+header, footer {
+  width: 100%;
+  text-align: center;
+} 

@@ -4,6 +4,7 @@ class MessagesController < ApplicationController
   # GET /messages or /messages.json
   def index
     @messages = Message.all
+    @message = Message.new
   end
 
   # GET /messages/1 or /messages/1.json
@@ -25,9 +26,11 @@ class MessagesController < ApplicationController
 
     respond_to do |format|
       if @message.save
+        format.turbo_stream
         format.html { redirect_to @message, notice: "Message was successfully created." }
         format.json { render :show, status: :created, location: @message }
       else
+        format.turbo_stream { render :create_error }
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @message.errors, status: :unprocessable_entity }
       end
@@ -49,10 +52,12 @@ class MessagesController < ApplicationController
 
   # DELETE /messages/1 or /messages/1.json
   def destroy
-    @message.destroy!
+    @message = Message.find(params[:id])
+    @message.destroy
 
     respond_to do |format|
-      format.html { redirect_to messages_path, status: :see_other, notice: "Message was successfully destroyed." }
+      format.turbo_stream
+      format.html { redirect_to messages_path, notice: "Message was successfully destroyed." }
       format.json { head :no_content }
     end
   end
@@ -60,11 +65,14 @@ class MessagesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_message
-      @message = Message.find(params.expect(:id))
+      @message = Message.find_by(id: params[:id])
+      unless @message
+        redirect_to messages_path, alert: "Message not found."
+      end
     end
 
     # Only allow a list of trusted parameters through.
     def message_params
-      params.expect(message: [ :body ])
+      params.require(:message).permit(:content)
     end
 end

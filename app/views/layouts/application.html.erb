@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= I18n.locale %>">
   <head>
     <title><%= content_for(:title) || "Turboapp" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -8,21 +8,33 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= yield :head %>
-
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+    <%# Remplacer le CDN Simple.css par notre version personnalisée %>
+    <%= stylesheet_link_tag "theme/simple", "data-turbo-track": "reload" %>
+    <%#= stylesheet_link_tag "app", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
 
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
-
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+    
+    <%= yield :head %>
   </head>
 
   <body>
-    <%= yield %>
+    <header>
+      <nav>
+        <%= link_to "Home", root_path %>
+        <%= link_to "Blog", blog_path if defined?(blog_path) %>
+        <%= link_to "About", about_path if defined?(about_path) %>
+      </nav>
+    </header>
+
+    <main>
+      <%= yield %>
+    </main>
+
+    <footer>
+      <p>&copy; <%= Time.current.year %> Your Name</p>
+    </footer>
   </body>
 </html>
