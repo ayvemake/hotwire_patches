@@ -1,5 +1,6 @@
 <div id="<%= dom_id message %>">
-  <p><%= message.content %></p>
+  <p><%= message.content %></p> 
+  <p style="font-size: small; font-style: italic;"><%= message.created_at.strftime("%B %d, %Y at %I:%M %p") %></p> 
   <%= link_to 'Show', message, class: 'show-message' %>
   <%= link_to 'Delete', 
               message_path(message), 
