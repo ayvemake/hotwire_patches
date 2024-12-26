@@ -70,6 +70,7 @@ class MessagesController < ApplicationController
       end
     end
   end
+  
 
   # DELETE /messages/1 or /messages/1.json
   def destroy
