@@ -20,11 +20,7 @@ class MessagesController < ApplicationController
   def edit
     respond_to do |format|
       format.html
-      format.turbo_stream do
-        render turbo_stream.update(dom_id(@message),
-          partial: "messages/messages_form",
-          locals: { message: @message })
-      end
+      format.turbo_stream # Utilisera automatiquement edit.turbo_stream.erb
     end
   end
 
@@ -34,13 +30,26 @@ class MessagesController < ApplicationController
 
     respond_to do |format|
       if @message.save
-        format.turbo_stream
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.update('new_message', 
+                                partial: "messages/messages_form", 
+                                locals: { message: Message.new }),
+            turbo_stream.prepend('messages', 
+                                partial: "messages/message", 
+                                locals: { message: @message }),
+            turbo_stream.update('message_counter', html: Message.count)
+          ]
+
+        end
         format.html { redirect_to @message, notice: "Message was successfully created." }
-        format.json { render :show, status: :created, location: @message }
       else
-        format.turbo_stream { render :create_error }
+        format.turbo_stream do
+          render turbo_stream.update("new_message") do
+            render partial: "messages/messages_form", locals: { message: @message }
+          end
+        end
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @message.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -49,17 +58,13 @@ class MessagesController < ApplicationController
   def update
     respond_to do |format|
       if @message.update(message_params)
-        format.turbo_stream do
-          render turbo_stream.update(dom_id(@message),
-            partial: "messages/message",
-            locals: { message: @message })
-        end
+        format.turbo_stream # Utilisera automatiquement update.turbo_stream.erb
         format.html { redirect_to @message, notice: "Message was successfully updated." }
       else
         format.turbo_stream do
-          render turbo_stream.update(dom_id(@message),
-            partial: "messages/messages_form",
-            locals: { message: @message })
+          render turbo_stream.update(dom_id(@message)) do
+            render partial: "messages/messages_form", locals: { message: @message }
+          end
         end
         format.html { render :edit, status: :unprocessable_entity }
       end
@@ -75,6 +80,10 @@ class MessagesController < ApplicationController
       format.turbo_stream
       format.html { redirect_to messages_path, notice: "Message was successfully destroyed." }
       format.json { head :no_content }
+      render turbo_stream: [
+        turbo_stream.remove("message_#{@message.id}"),
+        turbo_stream.update('message_counter', html: Message.count)
+      ]
     end
   end
 

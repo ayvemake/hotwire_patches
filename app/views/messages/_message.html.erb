@@ -1,12 +1,14 @@
 <turbo-frame id="<%= dom_id message %>">
   <div>
-    <p><%= message.content %></p> 
-    <p style="font-size: small; font-style: italic;"><%= message.created_at.strftime("%B %d, %Y at %I:%M %p") %></p> 
-    <%= link_to 'Show', message, class: 'show-message' %>
-    <%= link_to "Edit", edit_message_path(message), data: { turbo_frame: dom_id(message) } %> 
-    <%= link_to 'Delete', 
-                message_path(message), 
-                data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, 
-                class: 'delete-message' %>
+    <% if message.content.present? %>
+      <p><%= message.content %></p>
+      <p style="font-size: small; font-style: italic;"><%= message.created_at.strftime("%B %d, %Y at %I:%M %p") %></p> 
+      <%= link_to 'Show', message, class: 'show-message' %>
+      <%= link_to "Edit", edit_message_path(message), data: { turbo_frame: dom_id(message) } %> 
+      <%= link_to 'Delete', 
+                  message_path(message), 
+                  data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, 
+                  class: 'delete-message' %>
+    <% end %>
   </div>
 </turbo-frame>

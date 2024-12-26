@@ -1,6 +1,8 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @message %>
+<turbo-frame id="<%= dom_id @message %>">
+  <%= render @message %>
+</turbo-frame>
 
 <div>
   <%= link_to "Back to messages", messages_path %>

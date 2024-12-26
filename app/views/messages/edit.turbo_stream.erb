@@ -1,0 +1,4 @@
+<%= turbo_stream.update dom_id(@message) do %>
+  <%= render "messages/messages_form", message: @message %>
+  <%= render "messages/message", message: @message %>
+<% end %> 

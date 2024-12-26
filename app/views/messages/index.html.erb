@@ -2,11 +2,18 @@
 
 <% content_for :title, "Messages" %>
 
-<h1>Messages</h1>
+<h1>
+Messages
+<span id="message_counter">
+  <%= Message.count %>
+</span>
 
-<div id="new_message">
+</h1>
+
+
+<turbo-frame id="new_message">
   <%= render 'messages/messages_form', message: @message %>
-</div>
+</turbo-frame>
 
 <div id="messages">
   <%= render @messages %>
