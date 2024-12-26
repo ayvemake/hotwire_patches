@@ -1,21 +1,26 @@
-<%= form_with(model: message, local: true) do |form| %>
-  <% if message.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(message.errors.count, "error") %> prohibited this message from being saved:</h2>
-      <ul>
-        <% message.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
+<turbo-frame id="<%= dom_id message %>">
+  <%= form_with(model: message) do |form| %>
+    <% if message.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(message.errors.count, "error") %> prohibited this message from being saved:</h2>
+        <ul>
+          <% message.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="field">
+      <%= form.label :content %>
+      <%= form.text_area :content, value: message.content %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit %>
+      <% if message.persisted? %>
+        <%= link_to "Cancel", message_path(message), data: { turbo_frame: dom_id(message) } %>
+      <% end %>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= form.label :content %>
-    <%= form.text_area :content %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %> 
+</turbo-frame> 
