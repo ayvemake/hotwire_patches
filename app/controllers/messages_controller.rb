@@ -70,8 +70,6 @@ class MessagesController < ApplicationController
       end
     end
   end
-  
-
   # DELETE /messages/1 or /messages/1.json
   def destroy
     @message = Message.find(params[:id])
@@ -88,6 +86,8 @@ class MessagesController < ApplicationController
     end
   end
 
+
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_message
